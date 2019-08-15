@@ -118,12 +118,16 @@ client.once('ready', () => {
                  fetchVideoInfo(localarray[0].id, function(err ,videoInfo){
                  if(err) throw new Error(err);
                  
-                     message.channel.send(tex+videoInfo.title+"\n"+"Link : "+videoInfo.url+"\n-Time Elapsed : "+`${hr}:${format(mn)}:${format(ss)}`+"\n```");
-                     let embed = new Discord.RichEmbed()
-                                .setColor("RANDOM")
-                                .setTitle(videoInfo.genre)
-                                .setThumbnail(videoInfo.thumbnailUrl);            
+                 let embed = new Discord.RichEmbed()
+                 .setColor("RANDOM")
+                 .setTitle(videoInfo.genre)
+                 .setDescription(tex+videoInfo.title+"\n"+"-Time Elapsed : "+`${hr}:${format(mn)}:${format(ss)}`+"\n```")
+                 .setThumbnail(videoInfo.thumbnailUrl)
+                 .addField("Link :",videoInfo.url,false) 
+                 .setFooter("UwU , so u using Yui Bot  !",client.user.displayAvatarURL);          
                      message.channel.send(embed);
+                     //message.channel.send(tex+videoInfo.title+"\n"+"Link : "+videoInfo.url+"\n-Time Elapsed : "+`${hr}:${format(mn)}:${format(ss)}`+"\n```");
+                     
                      console.log(`${hr}:${format(mn)}:${format(ss)}`);
              });
      
@@ -154,7 +158,7 @@ client.once('ready', () => {
         isplaying = true;
         console.log("stream started!");
         let dispatcher = connection.playStream(stream);
-        console.log("current playing Item : name "+localarray[0].name+" url : "+localarray[0].url);
+        console.log("current playing Item : name "+localarray[0].name+"  ||  url : "+localarray[0].url);
 
         dispatcher.on('end',function(){
             if(stop == true)
