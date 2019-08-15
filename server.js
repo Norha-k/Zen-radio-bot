@@ -1,11 +1,7 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 const streamOptions = { seek: 0, volume: 1 };
-const request = require("request");
-const fs = require("fs");
-const getYouTubeID = require("get-youtube-id");
 const fetchVideoInfo = require("youtube-info");
-const os  = require("os");
 const ytlist = require('youtube-playlist');
 const client = new Discord.Client();
 const {prefix} = require('./config.json');
@@ -151,13 +147,13 @@ client.once('ready', () => {
         .then(connection =>{
             
 
-        let stream = ytdl(localarray[0].url).on("error", err =>{
+        let stream = ytdl(localarray[0].url,{ filter : 'audioonly' }).on("error", err =>{
             client.user.setActivity("stream went offline!");
             console.log(err);
         });
         isplaying = true;
         console.log("stream started!");
-        let dispatcher = connection.playStream(stream);
+        let dispatcher = connection.playStream(stream, streamOptions);
         console.log("current playing Item : name "+localarray[0].name+"  ||  url : "+localarray[0].url);
 
         dispatcher.on('end',function(){
@@ -174,7 +170,10 @@ client.once('ready', () => {
                 client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| ^help");
                 console.log("Next track started : ")
                 localarray.push(localarray.shift());
-                play_stream();
+                setTimeout(()=>{
+                                     play_stream();
+                                },2000);
+               
 
             } 
             
