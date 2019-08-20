@@ -19,17 +19,25 @@ http.createServer().listen(port);
 const token = process.env.TOKEN;
 
 
-client.once('ready', () => {
+client.once('ready',async () => {
     console.log('Zen Bot Ready!');
     client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| ^help");
-    ytlist(url,['id', 'name', 'url']).then(res => {
+    var channel = client.channels.get('540123873731936267');//set a generel channel
+    channel.sendMessage(":hourglass_flowing_sand:  **Processsing Bot , just wait a sec** !:hourglass_flowing_sand:  ");
+    await ytlist(url,['id', 'name', 'url']).then(res => {
         localarray=[...res.data.playlist];
        //localarray.push(res.data.playlist);
         console.log(res.data);
        console.log("Array value 1 : ",localarray); 
     
-                                                 });
+         });
+     play_stream();
+     setTimeout(()=>{
+         channel.sendMessage("all done , Thank you ! :hibiscus: ")
+     },5000);
+    console.log("array value in ready : "+localarray)
     });
+    
 
     client.on('message', message=>{
         if(message.content.startsWith(prefix+"ping"))
@@ -81,6 +89,9 @@ client.once('ready', () => {
             console.log("value fetching : "+localarray[((localarray.length)-1)].url);
             message.channel.send("```"+localarray[((localarray.length)-1)].url+"```");
             
+                PlayListShow(localarray,message);
+            
+            
             
         }
         if(message.content.startsWith(prefix+"help"))
@@ -90,10 +101,11 @@ client.once('ready', () => {
                 .setColor("RANDOM")
                 .addField("Zen-kun : ",url,false)
                 .addField("ping ",prefix+"ping",false)
+                .addField("get all songs List",prefix+"gimi",false)
                 .addField("check track playing ",prefix+"track",false)
                 .addField("[admin-rights]start Radio manually",prefix+"zenplay",false)
                 .addField("[admin-rights]stop Radio manually",prefix+"stop",false)
-                .setDescription("Hey ! ZenBot here , created by Hemantk(Otaku)\nyou can go through official zenkun nightcore Radio Link in below so in end Enjoy Nightcores ! :heart: ...")
+                .setDescription("Hey ! ZenBot here , created by Hemantk(Otaku)#2123\nyou can go through official zenkun nightcore Radio Link in below so in end Enjoy Nightcores ! :heart: ...")
                 .setThumbnail(client.user.displayAvatarURL);
                        
                 message.channel.send(embedd);
@@ -147,7 +159,7 @@ client.once('ready', () => {
         .then(connection =>{
             
 
-        let stream = ytdl(localarray[0].url,{ filter : 'audioonly' }).on("error", err =>{
+        let stream = ytdl(localarray[0].url,{ filter : 'audioonly',highWaterMark: 1<<25 }).on("error", err =>{
             client.user.setActivity("stream went offline!");
             console.log(err);
         });
@@ -155,7 +167,7 @@ client.once('ready', () => {
         console.log("stream started!");
         let dispatcher = connection.playStream(stream, streamOptions);
         console.log("current playing Item : name "+localarray[0].name+"  ||  url : "+localarray[0].url);
-
+        
         dispatcher.on('end',function(){
             if(stop == true)
             {
@@ -198,12 +210,36 @@ client.once('ready', () => {
            console.log("Array value 1 : ",localarray);
             
     
-                                                      });
+         });
 
       }
-
-
-
+      function PlayListShow(Array,message)
+      {   
+      
+      
+      
+          var mes = "```"+"       Inari Ōkami | 稲荷大神 (database playlist) \n\n"+"\n";
+              for(var i =  0; i < Array.length; i++)
+              {
+                  
+                      
+                      var temp = (i+1) + " : " + Array[i].name +"\n";
+                      if((mes + temp ).length <= 2000-3)
+                      {
+                          mes += temp;
+                      }
+                      else
+                      {
+                          mes += "```";
+                          message.channel.send(mes);
+                          mes = "```";
+                      }  
+      
+              }
+              mes +="```";
+              message.channel.send(mes);
+      
+      }
 
 
 client.on('error', err =>{
