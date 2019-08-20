@@ -21,9 +21,12 @@ const token = process.env.TOKEN;
 
 client.once('ready',async () => {
     console.log('Zen Bot Ready!');
+
+
     client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| ^help");
     var channel = client.channels.get('540123873731936267');//set a generel channel
     channel.sendMessage(":hourglass_flowing_sand:  **Processsing Bot , just wait a sec** !:hourglass_flowing_sand:  ");
+
     await ytlist(url,['id', 'name', 'url']).then(res => {
         localarray=[...res.data.playlist];
        //localarray.push(res.data.playlist);
@@ -31,9 +34,11 @@ client.once('ready',async () => {
        console.log("Array value 1 : ",localarray); 
     
          });
+    await shuffleArray(localarray);
      play_stream();
+
      setTimeout(()=>{
-         channel.sendMessage("all done , Thank you ! :hibiscus: ")
+         channel.sendMessage(":bird: All done , Thank you ! :hibiscus: ")
      },5000);
 
     });
@@ -213,6 +218,14 @@ client.once('ready',async () => {
          });
 
       }
+
+      function shuffleArray(array) {
+        console.log("shuffle completed !");
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
       function PlayListShow(Array,message)
       {   
       
