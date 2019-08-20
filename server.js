@@ -35,7 +35,7 @@ client.once('ready',async () => {
      setTimeout(()=>{
          channel.sendMessage("all done , Thank you ! :hibiscus: ")
      },5000);
-    console.log("array value in ready : "+localarray)
+
     });
     
 
