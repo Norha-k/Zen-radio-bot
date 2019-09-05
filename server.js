@@ -24,12 +24,11 @@ client.once('ready',async () => {
 
 
     client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| ^help");
-    var channel = client.channels.get('540123873731936267');//set a generel channel
+    var channel = client.channels.get('576875571036946433');//set a generel channel
     channel.sendMessage(":hourglass_flowing_sand:  **Processsing Bot , just wait a sec** !:hourglass_flowing_sand:  ");
 
     await ytlist(url,['id', 'name', 'url']).then(res => {
         localarray=[...res.data.playlist];
-       //localarray.push(res.data.playlist);
         console.log(res.data);
        console.log("Array value 1 : ",localarray); 
     
@@ -99,6 +98,13 @@ client.once('ready',async () => {
             
             
         }
+        if(message.content.startsWith(prefix+"skip"))
+        {
+            message.channel.send("skipped");
+            skip_song(message);
+            
+            
+        }
         if(message.content.startsWith(prefix+"help"))
         {
             let embedd = new Discord.RichEmbed() 
@@ -163,7 +169,7 @@ client.once('ready',async () => {
         voicechannel.join()
         .then(connection =>{
             
-
+        
         let stream = ytdl(localarray[0].url,{ filter : 'audioonly',highWaterMark: 1<<25 }).on("error", err =>{
             client.user.setActivity("stream went offline!");
             console.log(err);
@@ -196,10 +202,10 @@ client.once('ready',async () => {
             
         })
         dispatcher.on('error', function(){
-            message.channel.send("sorry stream is Offline !")
+            console.log("error here !")
         })
                         });
-  console.log("Successfully connected.");
+    console.log("Successfully connected.");
 
     }
         function isYouTube(str) {
@@ -254,7 +260,11 @@ client.once('ready',async () => {
       
       }
 
+    function skip_song(message){
 
+        message.member.voiceChannel.connection.dispatcher.end();
+       
+    }
 client.on('error', err =>{
     console.log(err);
 })

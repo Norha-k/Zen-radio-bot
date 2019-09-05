@@ -10,7 +10,7 @@ const client = new Discord.Client();
 const {prefix} = require('./config.json');
 var isplaying = false;
 var stop = false;
-var url = "https://www.youtube.com/watch?v=8ptZkxgcj7I";
+var url = "https://www.youtube.com/watch?v=J20u_NrRI-s";
 
 require('dotenv/config');
 //heruko proof
@@ -104,6 +104,8 @@ client.once('ready', () => {
 
         let stream = ytdl(url).on("error", err =>{
             client.user.setActivity("stream went offline!");
+            voicechannel.leave();
+            play_stream();
             console.log(err);
         });
         isplaying = true;
@@ -121,21 +123,23 @@ client.once('ready', () => {
             else
             {
                 console.log("connection down restarting stream...");
+                dispatcher.destroy();
+                voicechannel.leave();
                 play_stream();
 
             } 
             
         })
         dispatcher.on('error', function(){
+            voicechannel.leave();
             message.channel.send("sorry stream is Offline !")
+            play_stream();
         })
                         });
   console.log("Successfully connected.");
 
     }
-    function isYouTube(str) {
-        return str.toLowerCase().indexOf("youtube.com") > -1;
-      }
+    
 client.on('error', err =>{
     console.log(err);
 })
