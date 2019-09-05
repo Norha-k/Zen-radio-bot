@@ -1,10 +1,5 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
-const streamOptions = { seek: 0, volume: 1 };
-const request = require("request");
-const fs = require("fs");
-const getYouTubeID = require("get-youtube-id");
-const fetchVideoInfo = require("youtube-info");
 const os  = require("os");
 const client = new Discord.Client();
 const {prefix} = require('./config.json');
@@ -102,7 +97,7 @@ client.once('ready', () => {
         voicechannel.join()
         .then(connection =>{
 
-        let stream = ytdl(url).on("error", err =>{
+        let stream = ytdl(url,{ highWaterMark: 1<<25 }).on("error", err =>{
             client.user.setActivity("stream went offline!");
             voicechannel.leave();
             play_stream();
