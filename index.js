@@ -17,7 +17,7 @@ const token = process.env.TOKEN;
 
 client.once('ready', () => {
     console.log('Zen Bot Ready!');
-    client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| ^help");
+    client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| "+prefix+"help");
     play_stream();
     isplaying = true;
     
@@ -44,7 +44,7 @@ client.once('ready', () => {
             {
                 let embedd = new Discord.RichEmbed() 
                 .setColor("RANDOM")
-                .setDescription("**Zen - kun Nightcore Radio already Playing**...")
+                .setDescription("**Zen - kun Nightcore Radio already Playing**...\n  url:"+url)
                 .setThumbnail(client.user.displayAvatarURL);
                        
                 message.channel.send(embedd);
@@ -98,7 +98,7 @@ client.once('ready', () => {
         .then(connection =>{
 
         let stream = ytdl(url,{ highWaterMark: 1<<25 }).on("error", err =>{
-            client.user.setActivity("stream went offline!");
+            client.user.setActivity("stream went offline in at Inndex start!");
             voicechannel.leave();
             play_stream();
             console.log(err);
@@ -106,6 +106,7 @@ client.once('ready', () => {
         isplaying = true;
         console.log("stream started!");
         let dispatcher = connection.playStream(stream);
+        client.user.setActivity("Zen-Kun Radio 24/7 Hemantk|| "+prefix+"help");
         dispatcher.on('end',function(){
             if(stop == true)
             {
@@ -127,7 +128,7 @@ client.once('ready', () => {
         })
         dispatcher.on('error', function(){
             voicechannel.leave();
-            message.channel.send("sorry stream is Offline !")
+            client.user.setActivity("stream went offline in at dispacther");
             play_stream();
         })
                         });
